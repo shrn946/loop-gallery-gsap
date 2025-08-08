@@ -8,11 +8,7 @@
 
 defined('ABSPATH') || exit;
 
-
-
 class Loop_Gallery_GSAP {
-
-
 
     public function __construct() {
         add_shortcode('loop_gallery_gsap', [$this, 'render_gallery']);
@@ -100,6 +96,7 @@ class Loop_Gallery_GSAP {
         register_setting('loop_gallery_settings', 'loop_gallery_images', [
             'type' => 'array',
             'sanitize_callback' => function ($images) {
+                if (!is_array($images)) return [];
                 return array_filter($images, function ($img) {
                     return filter_var($img, FILTER_VALIDATE_URL);
                 });
@@ -115,6 +112,7 @@ class Loop_Gallery_GSAP {
 
     public function settings_page() {
         $images = get_option('loop_gallery_images', []);
+        if (!is_array($images)) $images = [];
         $bg_color = get_option('loop_gallery_bg_color', '#ffffff');
         ?>
         <div class="wrap loop-gallery-admin">
@@ -153,7 +151,7 @@ class Loop_Gallery_GSAP {
             return '';
         }
         $images = get_option('loop_gallery_images', []);
-        if (empty($images)) {
+        if (!is_array($images) || empty($images)) {
             return '<p>No images added to Loop Gallery yet.</p>';
         }
 
@@ -161,11 +159,7 @@ class Loop_Gallery_GSAP {
         ob_start();
         ?>
         <div class="gril">
-        <section>
-
-
-
-</section>
+            <section></section>
             <div class="gallery">
                 <?php foreach ($columns as $col): ?>
                     <div class="col">

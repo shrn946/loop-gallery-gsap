@@ -5,6 +5,37 @@
   overflow-x: hidden;
 }
 
+.gril .gallery {
+  display: flex;
+  flex-wrap: nowrap; /* or wrap for mobile */
+  justify-content: center;
+  width: 100%;
+  height: auto; /* better than fixed 100% height */
+  position: relative; /* avoid fixed on mobile */
+  overflow: hidden;
+}
+
+.gril .col {
+  flex: 1 1 33%; /* three columns on desktop */
+}
+
+@media (max-width: 768px) {
+  .gril .gallery {
+    flex-wrap: wrap;
+    position: relative;
+    height: auto;
+  }
+ .gril .col {
+  flex: none !important; /* prevent flex grow/shrink */
+  width: 100%; /* full width column */}
+  .gril .image img {
+  
+    width: 100%;
+    height: auto;
+  }
+}
+
+
 .gril section {
   padding: 10vw;
   height: 100%;
