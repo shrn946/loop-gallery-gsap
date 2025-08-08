@@ -5,18 +5,10 @@
   overflow-x: hidden;
 }
 
-.gril .gallery {
-  display: flex;
-  flex-wrap: nowrap; /* or wrap for mobile */
-  justify-content: center;
-  width: 100%;
-  height: auto; /* better than fixed 100% height */
-  position: relative; /* avoid fixed on mobile */
-  overflow: hidden;
-}
+
 
 .gril .col {
-  flex: 1 1 33%; /* three columns on desktop */
+  flex: 1 1 33% !important; /* three columns on desktop */
 }
 
 @media (max-width: 768px) {
@@ -85,19 +77,17 @@
 }
 
 .gril .gallery {
-  z-index: 1;
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  width: 100%;
-  height: 100%;
-  position: fixed;
-  top: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  overflow: visible;
-  background:#fff;
+    z-index: 1;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    width: 100%;
+    /* height: auto or unset so it only takes needed height */
+    position: relative;  /* or just remove this line */
+    margin: 0 auto;
+    background: {$bg_color} !important;
 }
+
 @media (max-width: 768px) {
   .gril .gallery {
     width: 160%;
