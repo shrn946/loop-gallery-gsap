@@ -26,6 +26,13 @@ class Loop_Gallery_GSAP {
         wp_enqueue_script('gsap', 'https://unpkg.com/gsap@3/dist/gsap.min.js', [], null, true);
         wp_enqueue_script('gsap-scrolltrigger', 'https://unpkg.com/gsap@3/dist/ScrollTrigger.min.js', ['gsap'], null, true);
         wp_enqueue_script('loop-gallery-script', $plugin_url . 'script.js', ['gsap', 'gsap-scrolltrigger'], '1.1', true);
+		        wp_enqueue_script('loop-gallery-script', $plugin_url . 'scroll-acceleration.js', ['gsap', 'gsap-scrolltrigger'], '1.1', true);
+
+        // Pass scroll speed option to JS
+        $scroll_speed = get_option('loop_gallery_scroll_speed', 10);
+        wp_localize_script('loop-gallery-script', 'LoopGallerySettings', [
+            'scrollSpeed' => (int) $scroll_speed,
+        ]);
     }
 
     public function admin_assets($hook) {
@@ -108,15 +115,25 @@ class Loop_Gallery_GSAP {
             'default' => '#ffffff',
             'sanitize_callback' => 'sanitize_hex_color'
         ]);
+
+        // NEW setting for scroll speed
+        register_setting('loop_gallery_settings', 'loop_gallery_scroll_speed', [
+            'type' => 'number',
+            'default' => 10,
+            'sanitize_callback' => 'absint',
+        ]);
     }
 
     public function settings_page() {
         $images = get_option('loop_gallery_images', []);
         if (!is_array($images)) $images = [];
         $bg_color = get_option('loop_gallery_bg_color', '#ffffff');
+        $scroll_speed = get_option('loop_gallery_scroll_speed', 10);
         ?>
         <div class="wrap loop-gallery-admin">
             <h1>Loop Gallery Settings</h1>
+            
+            <p>To add the gallery anywhere on your site, just insert the shortcode <code>[loop_gallery_gsap] </code>into your page, post, or widget. </p>
             <form method="post" action="options.php">
                 <?php settings_fields('loop_gallery_settings'); ?>
                 <?php do_settings_sections('loop_gallery_settings'); ?>
@@ -124,6 +141,12 @@ class Loop_Gallery_GSAP {
                 <div class="loop-gallery-setting">
                     <label for="loop_gallery_bg_color">Background Color:</label>
                     <input type="color" name="loop_gallery_bg_color" value="<?php echo esc_attr($bg_color); ?>">
+                </div>
+
+                <div class="loop-gallery-setting">
+                    <label for="loop_gallery_scroll_speed">Scrolling Speed (seconds):</label>
+                    <input type="number" min="1" max="60" step="1" name="loop_gallery_scroll_speed" value="<?php echo esc_attr($scroll_speed); ?>">
+                    <p class="description">Set the base duration of the scroll animation. Higher means slower scroll.</p>
                 </div>
 
                 <div id="loop-gallery-images">

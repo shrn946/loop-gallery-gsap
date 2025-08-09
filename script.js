@@ -21,7 +21,7 @@ cols.forEach((col, i) => {
 
     const anim = gsap.to(item, {
       y: direction + columnHeight / 2,
-      duration: 10, // faster base movement
+      duration: (typeof LoopGallerySettings !== "undefined" && LoopGallerySettings.scrollSpeed) ? LoopGallerySettings.scrollSpeed : 10, // dynamic duration
       repeat: -1,
       ease: "none",
       modifiers: {
